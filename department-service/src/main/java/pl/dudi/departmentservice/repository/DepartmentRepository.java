@@ -6,4 +6,5 @@ import pl.dudi.departmentservice.entity.Department;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department,Long> {
 
+    Department findByDepartmentCode(String departmentCode);
 }
