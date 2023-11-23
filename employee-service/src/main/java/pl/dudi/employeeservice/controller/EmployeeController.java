@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.dudi.employeeservice.dto.EmployeeDto;
 import pl.dudi.employeeservice.service.EmployeeService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/employees")
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeDto> createEmployee(
-    @RequestBody EmployeeDto employeeDto
+    @Valid @RequestBody EmployeeDto employeeDto
     ) {
         EmployeeDto savedEmployee = employeeService.saveEmployee(employeeDto);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);

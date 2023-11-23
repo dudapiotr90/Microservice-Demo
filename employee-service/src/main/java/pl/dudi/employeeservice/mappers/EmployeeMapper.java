@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import pl.dudi.employeeservice.dto.EmployeeDto;
 import pl.dudi.employeeservice.entity.Employee;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
     Employee mapToEmployee(EmployeeDto employeeDto);
