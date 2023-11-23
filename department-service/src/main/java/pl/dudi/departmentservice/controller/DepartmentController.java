@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.dudi.departmentservice.dto.DepartmentDto;
 import pl.dudi.departmentservice.service.DepartmentService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("api/departments")
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class DepartmentController {
 
     @PostMapping
     public ResponseEntity<DepartmentDto> createDepartment(
-        @RequestBody DepartmentDto departmentDto
+        @Valid @RequestBody DepartmentDto departmentDto
     ) {
         DepartmentDto savedDepartment = departmentService.saveDepartment(departmentDto);
         return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
