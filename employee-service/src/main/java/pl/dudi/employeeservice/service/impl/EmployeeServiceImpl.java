@@ -14,6 +14,7 @@ import pl.dudi.employeeservice.exception.EmailAlreadyExistException;
 import pl.dudi.employeeservice.exception.EmployeeNotFoundException;
 import pl.dudi.employeeservice.mappers.EmployeeMapper;
 import pl.dudi.employeeservice.repository.EmployeeRepository;
+import pl.dudi.employeeservice.service.APIClient;
 import pl.dudi.employeeservice.service.EmployeeService;
 
 import java.util.Optional;
@@ -26,8 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeMapper employeeMapper;
     private final ModelMapper modelMapper;
 
-    private final WebClient webClient;
-
+    private final APIClient apiClient;
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
         Optional<Employee> optionalEmployee = employeeRepository.findByEmail(employeeDto.getEmail());
@@ -49,12 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         );
         EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
 
-        DepartmentDto departmentDto = webClient.get()
-            .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
-            .retrieve()
-            .bodyToMono(DepartmentDto.class)
-            .block();
-
+        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
         APIResponseDto apiResponseDto = new APIResponseDto();
         apiResponseDto.setEmployee(employeeDto);
