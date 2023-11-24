@@ -23,4 +23,6 @@ public class EmployeeDto {
     @Email(message = "Email address should be correct")
     private String email;
 
+    private String departmentCode;
+
 }
