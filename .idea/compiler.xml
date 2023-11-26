@@ -30,7 +30,7 @@
       <module name="api-gateway" options="-parameters" />
       <module name="department-service" options="-parameters" />
       <module name="employee-service" options="-parameters" />
-      <module name="service-registry" options="-parameters" />
+      <module name="service-registry" options="" />
     </option>
   </component>
 </project>
