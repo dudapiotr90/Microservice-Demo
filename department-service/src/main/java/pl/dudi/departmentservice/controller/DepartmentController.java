@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.dudi.departmentservice.dto.DepartmentDto;
 import pl.dudi.departmentservice.service.DepartmentService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/departments")

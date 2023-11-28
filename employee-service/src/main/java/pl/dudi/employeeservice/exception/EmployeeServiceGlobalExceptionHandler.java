@@ -2,6 +2,7 @@ package pl.dudi.employeeservice.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -41,7 +42,7 @@ public class EmployeeServiceGlobalExceptionHandler extends ResponseEntityExcepti
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         MethodArgumentNotValidException ex,
         HttpHeaders headers,
-        HttpStatus status,
+        HttpStatusCode status,
         WebRequest request
     ) {
         BindingResult bindingResult = ex.getBindingResult();
@@ -53,6 +54,7 @@ public class EmployeeServiceGlobalExceptionHandler extends ResponseEntityExcepti
 
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalEmployeeServiceException(

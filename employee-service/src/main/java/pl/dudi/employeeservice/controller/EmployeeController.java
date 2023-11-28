@@ -8,7 +8,7 @@ import pl.dudi.employeeservice.dto.APIResponseDto;
 import pl.dudi.employeeservice.dto.EmployeeDto;
 import pl.dudi.employeeservice.service.EmployeeService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/employees")
