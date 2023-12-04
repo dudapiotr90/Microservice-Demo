@@ -29,7 +29,7 @@ public class EmployeeController {
     public ResponseEntity<APIResponseDto> getEmployee(
         @PathVariable(name = "id") Long employeeId
     ) {
-        APIResponseDto employee = employeeService.getEmployee(employeeId);
+        APIResponseDto employee = employeeService.getEmployeeById(employeeId);
         return ResponseEntity.ok(employee);
     }
 }

@@ -1,11 +1,10 @@
 package pl.dudi.employeeservice.service.impl;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 import pl.dudi.employeeservice.dto.APIResponseDto;
 import pl.dudi.employeeservice.dto.DepartmentDto;
 import pl.dudi.employeeservice.dto.EmployeeDto;
@@ -28,6 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final ModelMapper modelMapper;
 
     private final APIClient apiClient;
+
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
         Optional<Employee> optionalEmployee = employeeRepository.findByEmail(employeeDto.getEmail());
@@ -42,8 +42,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return modelMapper.map(savedEmployee, EmployeeDto.class);
     }
 
+    @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+//    @Retry(name = "${spring.application.name}",fallbackMethod = "getDefaultDepartment")
     @Override
-    public APIResponseDto getEmployee(Long employeeId) {
+    public APIResponseDto getEmployeeById(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
             () -> new EmployeeNotFoundException(String.format("Employee with id:[%s] doesn't exist!", employeeId))
         );
@@ -58,4 +60,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        return employeeMapper.mapToEmployeeDto(employee);
         return apiResponseDto;
     }
+
+    public APIResponseDto getDefaultDepartment(Long employeeId,Exception exception) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+            () -> new EmployeeNotFoundException(String.format("Employee with id:[%s] doesn't exist!", employeeId))
+        );
+        EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setDepartmentName("R&D Department");
+        departmentDto.setDepartmentCode("RD001");
+        departmentDto.setDepartmentDescription("Research and Development Department");
+
+        APIResponseDto apiResponseDto = new APIResponseDto();
+        apiResponseDto.setEmployee(employeeDto);
+        apiResponseDto.setDepartment(departmentDto);
+
+        return apiResponseDto;
+    }
+
 }

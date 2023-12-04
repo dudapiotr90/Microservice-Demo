@@ -7,5 +7,5 @@ public interface EmployeeService {
 
     EmployeeDto saveEmployee(EmployeeDto employeeDto);
 
-    APIResponseDto getEmployee(Long employeeId);
+    APIResponseDto getEmployeeById(Long employeeId);
 }
