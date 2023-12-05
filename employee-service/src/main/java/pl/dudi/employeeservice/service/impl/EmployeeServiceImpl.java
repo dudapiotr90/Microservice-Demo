@@ -3,6 +3,7 @@ package pl.dudi.employeeservice.service.impl;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +20,10 @@ import pl.dudi.employeeservice.service.APIClient;
 import pl.dudi.employeeservice.service.EmployeeService;
 
 import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeServiceImpl.class);
 
     private final EmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
@@ -50,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Retry(name = "${spring.application.name}",fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeById(Long employeeId) {
-        LOGGER.info("inside getEmployeeById() method");
+        log.info("inside getEmployeeById() method");
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
             () -> new EmployeeNotFoundException(String.format("Employee with id:[%s] doesn't exist!", employeeId))
@@ -68,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public APIResponseDto getDefaultDepartment(Long employeeId,Exception exception) {
-        LOGGER.info("inside getDefaultDepartment() method");
+        log.info("inside getDefaultDepartment() method");
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
             () -> new EmployeeNotFoundException(String.format("Employee with id:[%s] doesn't exist!", employeeId))
         );
