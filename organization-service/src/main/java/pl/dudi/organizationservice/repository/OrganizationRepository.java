@@ -7,4 +7,6 @@ import pl.dudi.organizationservice.entity.Organization;
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization,Long> {
 
+    Organization findByOrganizationCode(String organizationCode);
+
 }
