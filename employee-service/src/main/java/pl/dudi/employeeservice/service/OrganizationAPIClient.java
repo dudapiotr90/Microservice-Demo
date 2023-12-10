@@ -8,7 +8,7 @@ import pl.dudi.employeeservice.dto.OrganizationDto;
 
 @FeignClient(name = "ORGANIZATION-SERVICE")
 public interface OrganizationAPIClient {
-    @GetMapping("api/departments/{code}")
-    OrganizationDto getOrganization(@PathVariable(name = "code") String departmentCode);
+    @GetMapping("api/organizations/{code}")
+    OrganizationDto getOrganization(@PathVariable(name = "code") String organizationCode);
 
 }
