@@ -27,10 +27,8 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
     private final ModelMapper modelMapper;
 
-    private final WebClient webClient;
     private final DepartmentAPIClient departmentApiClient;
     private final OrganizationAPIClient organizationAPIClient;
 
@@ -40,11 +38,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (optionalEmployee.isPresent()) {
             throw new EmailAlreadyExistException(String.format("Email: [%s] is taken", employeeDto.getEmail()));
         }
-//        Employee employee = employeeMapper.mapToEmployee(employeeDto);
         Employee employee = modelMapper.map(employeeDto, Employee.class);
         Employee savedEmployee = employeeRepository.save(employee);
 
-//        return employeeMapper.mapToEmployeeDto(savedEmployee);
         return modelMapper.map(savedEmployee, EmployeeDto.class);
     }
 
@@ -61,18 +57,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         DepartmentDto departmentDto = departmentApiClient.getDepartment(employee.getDepartmentCode());
 
-        OrganizationDto organizationDto = webClient.get()
-            .uri("http://localhost:8083/api/organizations/" + employeeDto.getOrganizationCode())
-            .retrieve()
-            .bodyToMono(OrganizationDto.class)
-            .block();
+        OrganizationDto organizationDto = organizationAPIClient.getOrganization(employee.getOrganizationCode());
 
         APIResponseDto apiResponseDto = new APIResponseDto();
         apiResponseDto.setEmployee(employeeDto);
         apiResponseDto.setDepartment(departmentDto);
         apiResponseDto.setOrganization(organizationDto);
 
-//        return employeeMapper.mapToEmployeeDto(employee);
         return apiResponseDto;
     }
 
